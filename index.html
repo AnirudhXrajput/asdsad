@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #display{
+      height: 80px;
+      width: 100%;
+      background-color: antiquewhite;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+
+  <div id="display"></div>
+  <script>
+    let div = document.getElementById("display");
+    setTimeout(() => {
+      let your_location = fetch('https://api.ipify.org?format=json').then(your_location=>{
+        if(your_location.ok){
+          return your_location.json();
+        }
+        else{
+          throw new Error("something went wrong");
+        }
+      }).then(data =>{
+        let ip = data.ip;
+        div.innerHTML = `you IP number is ${ip}`;
+        let about_IP = fetch('http://ip-api.com/json/' + ip).then(about_IP =>{
+          if(about_IP.ok){
+            return about_IP.json();
+            }
+            return new console.error("some thing error");
+        }).then(data =>{
+          let country = data.country;
+          let city = data.city;
+          let region = data.region;
+          let timezone = data.timezone;
+          div.innerHTML += `<li>your ${city}</li><li>your ${country}</li><li>your ${region}</li><li>your ${timezone}</li>`
+        })
+
+      })
+      
+    }, 3000);
+  </script>
+</body>
+</html>
